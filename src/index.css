@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+
+/* =====================================================================
+   Beauty Salon — design system
+   Inspiré du salon : cuir noir, laiton brossé, marbre veiné.
+   ===================================================================== */
+@theme {
+  --color-ink: #15110d;          /* cuir noir : fond principal */
+  --color-panel: #1d1813;        /* surfaces */
+  --color-panel-2: #272019;      /* surfaces surélevées, survol */
+  --color-line: #3a3128;         /* bordures */
+  --color-brass: #c9a35b;        /* laiton : accent principal */
+  --color-brass-bright: #e2c17c; /* laiton éclairé : focus, survol */
+  --color-brass-deep: #8a6c34;   /* laiton sombre : traits secondaires */
+  --color-marble: #ece6da;       /* marbre : texte principal */
+  --color-smoke: #a89e8f;        /* texte secondaire */
+  --color-sage: #8db596;         /* succès */
+  --color-rust: #e58a76;         /* erreur, suppression */
+
+  --font-display: 'Bodoni Moda', 'Didot', Georgia, serif;
+  --font-sans: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+
+  --radius-panel: 14px;
+  --radius-control: 10px;
+
+  --shadow-panel: 0 1px 0 rgb(255 240 210 / 0.04) inset, 0 18px 40px -24px rgb(0 0 0 / 0.8);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-ink);
+    color: var(--color-marble);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-brass);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brass-bright);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  input, select, textarea, button {
+    font: inherit;
+  }
+  /* Masquer les flèches des champs nombre */
+  input[type='number']::-webkit-inner-spin-button { opacity: 0.4; }
+}
+
+@layer components {
+  .panel {
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-marble);
+    margin-bottom: 0.4rem;
+  }
+  .field-hint {
+    font-size: 0.8125rem;
+    color: var(--color-smoke);
+    margin-top: 0.35rem;
+  }
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--color-rust);
+    margin-top: 0.35rem;
+  }
+  .input {
+    width: 100%;
+    min-height: 2.875rem;
+    padding: 0.625rem 0.875rem;
+    background: var(--color-ink);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-control);
+    color: var(--color-marble);
+    transition: border-color 150ms;
+  }
+  .input::placeholder { color: #7d7466; }
+  .input:hover { border-color: var(--color-brass-deep); }
+  .input:focus { outline: none; border-color: var(--color-brass); box-shadow: 0 0 0 3px rgb(201 163 91 / 0.22); }
+  .input[aria-invalid='true'] { border-color: var(--color-rust); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.125rem;
+    border-radius: var(--radius-control);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    transition: background-color 150ms, border-color 150ms, color 150ms;
+    cursor: pointer;
+  }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-primary { background: var(--color-brass); color: var(--color-ink); }
+  .btn-primary:hover:not(:disabled) { background: var(--color-brass-bright); }
+  .btn-ghost { border: 1px solid var(--color-line); color: var(--color-marble); background: transparent; }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--color-brass); color: var(--color-brass-bright); }
+  .btn-danger { border: 1px solid rgb(229 138 118 / 0.5); color: var(--color-rust); background: transparent; }
+  .btn-danger:hover:not(:disabled) { background: rgb(229 138 118 / 0.12); }
+  .btn-danger-solid { background: var(--color-rust); color: var(--color-ink); }
+  .btn-danger-solid:hover:not(:disabled) { background: #f09e8b; }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .table th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: var(--color-smoke);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .table td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid rgb(58 49 40 / 0.6);
+    vertical-align: middle;
+  }
+  .table tbody tr:last-child td { border-bottom: 0; }
+  .table tbody tr.row-link { cursor: pointer; }
+  .table tbody tr.row-link:hover td { background: var(--color-panel-2); }
+
+  /* Image du salon + voile sombre pour garder le texte lisible */
+  .salon-photo {
+    background-image:
+      linear-gradient(100deg, rgb(21 17 13 / 0.94) 0%, rgb(21 17 13 / 0.78) 42%, rgb(21 17 13 / 0.35) 100%),
+      url('/images/barbershop-interior.png');
+    background-size: cover;
+    background-position: 62% center;
+    background-repeat: no-repeat;
+  }
+  @media (max-width: 767px) {
+    .salon-photo {
+      background-image:
+        linear-gradient(180deg, rgb(21 17 13 / 0.55) 0%, rgb(21 17 13 / 0.88) 55%, rgb(21 17 13 / 0.97) 100%),
+        url('/images/barbershop-interior.png');
+      background-position: 28% center;
+    }
+  }
+}
+
+/* Unique moment animé : le tampon qui se pose sur la carte de fidélité */
+@keyframes stamp-in {
+  0% { transform: scale(1.6) rotate(-14deg); opacity: 0; }
+  60% { transform: scale(0.92) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.stamp-new { animation: stamp-in 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.toast-in { animation: toast-in 200ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
