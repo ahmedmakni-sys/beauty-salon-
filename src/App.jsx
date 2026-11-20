@@ -16,6 +16,7 @@ import Visits from './pages/Visits'
 import Rewards from './pages/Rewards'
 import Settings from './pages/Settings'
 import NotFound from './pages/NotFound'
+import ClientCard from './pages/ClientCard'
 
 function LoginRoute() {
   const { session, loading } = useAuth()
@@ -31,6 +32,7 @@ export default function App() {
       <ToastProvider>
         <Routes>
           <Route path="/connexion" element={<LoginRoute />} />
+          <Route path="/carte/:token" element={<ClientCard />} />
           <Route
             element={
               <ProtectedRoute>

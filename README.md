@@ -95,3 +95,15 @@ src/pages/      Login, Dashboard, Customers, CustomerNew, CustomerEdit,
 - Choisir un mot de passe admin fort ; activer la sauvegarde de la base.
 - Prévoir une procédure pour annuler une visite saisie par erreur (non incluse : à faire en SQL par l'administrateur pour l'instant).
 - Optionnel : convertir la photo en WebP pour un chargement plus rapide.
+
+## Carte client (lien secret et QR code)
+
+Chaque client a une carte en lecture seule à l'adresse `/carte/<code>`, où le code est aléatoire et impossible à deviner.
+
+- **Installation :** exécutez aussi `supabase/migrations/20261120000003_client_card.sql` dans le SQL Editor. Les clients existants reçoivent automatiquement leur lien.
+- **Côté admin :** fiche client, bouton « Carte du client ». Il affiche le QR code, permet de copier le lien, de l'envoyer sur WhatsApp, d'imprimer une carte au format carte de visite, ou de créer un nouveau lien (l'ancien cesse alors de fonctionner).
+- **Côté client :** prénom, statut (Nouveau client, Habitué après 1 cycle, Membre or après 3 cycles), tampons, rappel après 21 jours sans visite, bouton « Réserver sur WhatsApp » (si le téléphone du salon est renseigné dans les Paramètres).
+- **Rien de privé n'est exposé :** pas de nom de famille, de téléphone, de notes, ni d'autres clients.
+- **En local**, le QR code pointe vers `localhost` : il ne s'ouvre sur un téléphone qu'une fois le site en ligne.
+
+Test SQL : `psql -d beauty_test -f supabase/tests/client_card_test.sql` (après les autres tests).

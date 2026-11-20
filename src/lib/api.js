@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
 import { normalizePhone } from './format'
 
-const CLIENT_COLUMNS = 'id, full_name, phone, notes, total_haircuts, cycle_position, cycle_number, created_at, updated_at'
+const CLIENT_COLUMNS = 'id, full_name, phone, notes, total_haircuts, cycle_position, cycle_number, share_token, created_at, updated_at'
 
 function unwrap({ data, error, count }) {
   if (error) throw error
@@ -90,4 +90,13 @@ export async function getSettings() {
 
 export async function updateSettings(values) {
   return unwrap(await supabase.from('salon_settings').update(values).eq('id', 1).select('*').single())
+}
+
+// Carte client publique (lecture seule, sans connexion)
+export async function getLoyaltyCard(token) {
+  return unwrap(await supabase.rpc('get_loyalty_card', { p_token: token }))
+}
+
+export async function regenerateShareToken(clientId) {
+  return unwrap(await supabase.rpc('regenerate_share_token', { p_client_id: clientId }))
 }

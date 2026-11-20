@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Pencil, Phone, Scissors, Trash2, CalendarDays, StickyNote, Gift } from 'lucide-react'
-import { deleteClient, getClient, listRewards, listVisits } from '../lib/api'
+import { Pencil, Phone, Scissors, Trash2, CalendarDays, StickyNote, Gift, QrCode } from 'lucide-react'
+import { deleteClient, getClient, getSettings, listRewards, listVisits } from '../lib/api'
 import { useAsync } from '../lib/useAsync'
 import { errorMessage, formatDate, formatDateTime, formatDT, formatPhone } from '../lib/format'
 import { useToast } from '../context/ToastContext'
 import LoyaltyCard from '../components/LoyaltyCard'
 import ConfirmDialog from '../components/ConfirmDialog'
+import ShareCardDialog from '../components/ShareCardDialog'
 import { EmptyBlock, ErrorBlock, LoadingBlock, Pagination, RewardTypeBadge, VisitTypeBadge } from '../components/ui'
 import NotFound from './NotFound'
 
@@ -22,11 +23,14 @@ export default function CustomerDetails() {
   const rewards = useAsync(() => listRewards({ clientId: id, pageSize: 50 }), [id])
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [sharing, setSharing] = useState(false)
+  const [token, setToken] = useState(null)
+  const settings = useAsync(getSettings, [])
 
   if (client.loading && !client.data) return <LoadingBlock />
   if (client.error) return <ErrorBlock message={errorMessage(client.error)} onRetry={client.reload} />
   if (!client.data) return <NotFound />
-  const c = client.data
+  const c = { ...client.data, share_token: token || client.data.share_token }
 
   async function remove() {
     setDeleting(true)
@@ -67,6 +71,10 @@ export default function CustomerDetails() {
             <Scissors className="size-4" aria-hidden />
             Enregistrer une visite
           </Link>
+          <button className="btn btn-ghost" onClick={() => setSharing(true)}>
+            <QrCode className="size-4" aria-hidden />
+            Carte du client
+          </button>
           <Link to={`/clients/${c.id}/modifier`} className="btn btn-ghost">
             <Pencil className="size-4" aria-hidden />
             Modifier
@@ -156,6 +164,14 @@ export default function CustomerDetails() {
           </>
         )}
       </section>
+
+      <ShareCardDialog
+        open={sharing}
+        client={c}
+        salonName={settings.data?.salon_name}
+        onClose={() => setSharing(false)}
+        onTokenChange={setToken}
+      />
 
       <ConfirmDialog
         open={confirmDelete}

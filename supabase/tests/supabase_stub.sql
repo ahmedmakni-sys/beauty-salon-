@@ -1,4 +1,7 @@
 -- Minimal imitation of Supabase's auth schema and roles, used only for local tests.
+create schema if not exists extensions;
+create extension if not exists pgcrypto schema extensions;
+grant usage on schema extensions to anon, authenticated;
 create schema if not exists auth;
 create table if not exists auth.users (id uuid primary key, email text unique);
 create or replace function auth.uid() returns uuid language sql stable as $$

@@ -47,3 +47,13 @@ export function errorMessage(error) {
   if (error.message === 'Invalid login credentials') return 'E-mail ou mot de passe incorrect.'
   return error.message || 'Une erreur inattendue est survenue.'
 }
+
+/** Numéro au format WhatsApp (wa.me) : "22345678" → "21622345678". */
+export function whatsappNumber(phone) {
+  const p = normalizePhone(phone)
+  if (/^\d{8}$/.test(p)) return `216${p}`
+  return p.replace('+', '')
+}
+
+/** Adresse publique de la carte d'un client. */
+export const cardUrl = (token) => `${window.location.origin}/carte/${token}`
